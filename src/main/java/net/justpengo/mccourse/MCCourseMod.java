@@ -1,6 +1,9 @@
 package net.justpengo.mccourse;
 
 import com.mojang.logging.LogUtils;
+import net.justpengo.mccourse.item.ModCreativeModeTabs;
+import net.justpengo.mccourse.item.ModItems;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -29,7 +32,9 @@ public class MCCourseMod {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
+        ModItems.register(modEventBus);
 
+        ModCreativeModeTabs.register(modEventBus);
 
 
         // Register ourselves for server and other game events we are interested in
@@ -48,12 +53,16 @@ public class MCCourseMod {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-
+        if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(ModItems.AZURITE);
+            event.accept(ModItems.RAW_AZURITE);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
+
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
